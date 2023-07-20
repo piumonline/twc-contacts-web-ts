@@ -1,29 +1,25 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 interface Props {
-    name: string
+  name: string;
 }
 
 function AddContact(props: Props) {
   return (
     <div>
-      {props.name==="add contact" ? (             
-         <button className=" flex h-[48px] items-center  rounded-full border p-2.5 px-6 font-FutuLight text-[25px] text-white">
-              {props.name}  
-            </button>
-                      
-
-      ):(
-  <Link to="/contacts/new">
-                        <button className=" flex h-[48px] items-center  rounded-full border p-2.5 px-6 font-FutuLight text-[25px] text-white">
-                          {props.name}  
-                        </button>
-                      </Link>
+      {props.name === "add contact" ? (
+        <button className=" flex h-[48px] items-center  rounded-full border p-2.5 px-6 font-FutuLight text-[25px] text-white">
+          {props.name}
+        </button>
+      ) : (
+        <Link to="/contacts/new">
+          <button className=" flex h-[48px] items-center  rounded-full border p-2.5 px-6 font-FutuLight text-[25px] text-white">
+            {props.name}
+          </button>
+        </Link>
       )}
-
-
-  </div>
-  )
+    </div>
+  );
 }
 
-export default AddContact
+export default AddContact;

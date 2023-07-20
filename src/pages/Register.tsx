@@ -1,7 +1,7 @@
 import Logo from "../components/Logo";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 interface FormValues {
@@ -9,83 +9,81 @@ interface FormValues {
   password: string;
   confirm_password: string;
 }
-  
-function Register() {
 
+function Register() {
   let navigate = useNavigate();
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({}); // state for errors
   const [isSubmit, setIsSubmit] = useState(false); // state for submit
 
   const [formValues, setFormValues] = useState<FormValues>({
     // state for form values
-    email: '',
-    password: '',
-    confirm_password: '',
+    email: "",
+    password: "",
+    confirm_password: "",
   });
 
-    // input change handler
+  // input change handler
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target; 
+    const { name, value } = e.target;
     setFormValues((pre) => ({ ...pre, [name]: value })); // update state
   };
 
-    // useEffect to submit form if there are no errors
-    useEffect(() => {
-      console.log(errors);
-      if (Object.keys(errors).length === 0 && isSubmit) {
-        console.log(formValues);
-        // submit form values to api
-        const registerUser = async () => {
-          try {
-            await axios.post('http://localhost:3000/users/auth/register', {
-              email: formValues.email,
-              password: formValues.password,
-            });
-            console.log(formValues.email);
-            console.log(formValues.password);
-  
-            console.log('user created');
-            navigate('/login');
-          } catch (error) {
-            console.error(error);
-          }
-        };
-  
-        registerUser();
-      }
-    }, [errors, formValues.email, formValues.password, isSubmit]);
+  // useEffect to submit form if there are no errors
+  useEffect(() => {
+    console.log(errors);
+    if (Object.keys(errors).length === 0 && isSubmit) {
+      console.log(formValues);
+      // submit form values to api
+      const registerUser = async () => {
+        try {
+          await axios.post("http://localhost:3000/users/auth/register", {
+            email: formValues.email,
+            password: formValues.password,
+          });
+          console.log(formValues.email);
+          console.log(formValues.password);
 
-    // form submit handler
+          console.log("user created");
+          navigate("/login");
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      registerUser();
+    }
+  }, [errors, formValues.email, formValues.password, isSubmit]);
+
+  // form submit handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmit(true);
     setErrors(validate(formValues)); // set errors if there is any
   };
 
-      // form validation handler
+  // form validation handler
   const validate = (values: typeof formValues) => {
     const errors: Record<string, string> = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i; // regex for email validation
     if (!values.email) {
-      errors.email = 'Email is required';
+      errors.email = "Email is required";
     } else if (!regex.test(values.email)) {
-      errors.email = 'Invalid email format';
+      errors.email = "Invalid email format";
     }
     if (!values.password) {
-      errors.password = 'Password is required';
+      errors.password = "Password is required";
     } else if (values.password.length < 4) {
-      errors.password = 'Password must be more than 4 characters';
+      errors.password = "Password must be more than 4 characters";
     }
     if (!values.confirm_password) {
-      errors.confirm_password = 'Please confirm your password';
+      errors.confirm_password = "Please confirm your password";
     }
     if (values.password !== values.confirm_password) {
-      errors.confirm_password = 'Password does not match';
+      errors.confirm_password = "Password does not match";
     }
     return errors;
   };
-
 
   return (
     <main className="background_login">
@@ -161,11 +159,11 @@ function Register() {
         </div>
         <div className="w-full lg:w-2/5 h-2/5 order-first lg:order-2 flex shrink-1 justify-center items-center pt-56">
           {/* <div className="bg-slate-400 lg:order-1"> */}
-          <Logo/>
+          <Logo />
         </div>
       </section>
     </main>
   );
-};
+}
 
-export default Register
+export default Register;

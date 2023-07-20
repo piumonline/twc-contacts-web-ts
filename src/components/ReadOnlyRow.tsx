@@ -37,9 +37,9 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
       const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
       const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
 
-      await axios.delete(
-        `http://localhost:3000/contacts/${contact.id}`,{ headers }
-      );
+      await axios.delete(`http://localhost:3000/contacts/${contact.id}`, {
+        headers,
+      });
       console.log(`${contact.name} deleted}`);
     } catch (error) {
       console.log(error);

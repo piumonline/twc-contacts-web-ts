@@ -18,7 +18,12 @@ interface EditableRowProps {
   setRow: (row: string) => void;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({ contact, handleCancelClick, togglePopup, setRow }) => {
+const EditableRow: React.FC<EditableRowProps> = ({
+  contact,
+  handleCancelClick,
+  togglePopup,
+  setRow,
+}) => {
   const [contactData, setContactData] = useState<Contact>({
     name: contact.name,
     gender: contact.gender,
@@ -32,7 +37,10 @@ const EditableRow: React.FC<EditableRowProps> = ({ contact, handleCancelClick, t
   };
 
   // update contact
-  const handleSaveClick = async (e: React.MouseEvent<HTMLButtonElement>, contact: Contact) => {
+  const handleSaveClick = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    contact: Contact,
+  ) => {
     setRow("EditOnlyRow");
     togglePopup();
 
@@ -47,7 +55,8 @@ const EditableRow: React.FC<EditableRowProps> = ({ contact, handleCancelClick, t
           email: contactData.email,
           phone: contactData.phone,
           gender: contactData.gender,
-        },{ headers },
+        },
+        { headers },
       );
       console.log("updated");
       handleCancelClick();
