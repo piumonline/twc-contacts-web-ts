@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface Contact {
   id: string;
@@ -33,9 +34,11 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
       setRow("ReadOnlyRow");
       togglePopup();
 
+      const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
+      const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
 
-      const response = await axios.delete(
-        `http://localhost:8080/api/contacts/${contact.id}`,
+      await axios.delete(
+        `http://localhost:3000/contacts/${contact.id}`,{ headers }
       );
       console.log(`${contact.name} deleted}`);
     } catch (error) {
@@ -61,7 +64,7 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
       <td className="px-6 py-4">
         <button type="button" onClick={(e) => handleEditClick(e, contact)}>
           <img
-            src="/img/material-symbols_edit-rounded.svg"
+            src={"/img/material-symbols_edit-rounded.svg"}
             width={20}
             height={20}
           />
@@ -70,7 +73,7 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
       <td className="px-6 py-4">
         <button type="button" onClick={(e) => deleteContact(e, contact)}>
           <img
-            src="/img/material-symbols_delete-outline.svg"
+            src={"/img/material-symbols_delete-outline.svg"}
             width={20}
             height={20}
           />

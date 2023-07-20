@@ -5,6 +5,7 @@ import EditableRow from "../components/EditableRow";
 import ReadOnlyRow from "../components/ReadOnlyRow";
 import AddContact from "../components/AddContact";
 import PopupWindow from "../components/PopupWindow";
+import Cookies from "js-cookie";
 
 interface Contact {
   id: string;
@@ -12,7 +13,6 @@ interface Contact {
   email: string;
   phone: string;
   gender: string;
-  // ... add other properties if needed
 }
 
 function Contacts() {
@@ -32,7 +32,7 @@ function Contacts() {
 
   const handleConfirm = () => {
     setShowPopup(false);
-    // Perform any delete logic here
+    //  delete logic
   };
 
   const handleEditClick = (event: React.MouseEvent, contact: Contact) => {
@@ -47,7 +47,10 @@ function Contacts() {
   useEffect(() => {
     const getAllContact = async () => {
       try {
-        const response = await axios.get<Contact[]>("http://localhost:3000/contacts/"); // send with authorization headers
+        const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
+        const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
+
+        const response = await axios.get<Contact[]>("http://localhost:3000/contacts/",{ headers }); // send with authorization headers
         setContacts(response.data);
       } catch (err) {
         console.log(err);
@@ -62,13 +65,17 @@ function Contacts() {
   }, [contacts]);
 
   return (
+      <div className="background_home min-h-screen">
+  <section className="flex h-screen flex-col">
+    {/* <Logo /> */}
+    <div className="grow flex-col px-[204px] flex justify-center">
     <div className="flex gap-1 flex-col">
       <div className="mb-20 lg:mb-[23px] flex flex-col lg:flex-row justify-between h-16 items-center ">
         <h2 className="mb-6 lg:my-[23px] text-slate-50 md:text-5xl font-bold leading-8 font-FutuBold flex text-center items-center justify-center">
           Contacts
         </h2>
         <div>
-          <AddContact name="add contact" />
+          <AddContact name="add new contact" />
         </div>
       </div>
       <div className="bg-white md:rounded-3xl w-full md:px-4 py-4 text-primary h-[45vh] overflow-y-auto">
@@ -96,7 +103,7 @@ function Contacts() {
                 <tbody>
                   {/* map through the contacts array and render the ReadOnlyRow component
                       if the editContactId is not equal to the contact id, otherwise render the EditableRow component */}
-                  {contacts.map((contact) => (
+                  {contacts.map((contact, index) => (
                     <React.Fragment key={contact.id}>
                       {editContactId === contact.id ? (
                         <EditableRow
@@ -104,14 +111,16 @@ function Contacts() {
                           handleCancelClick={handleCancelClick}
                           togglePopup={togglePopup}
                           setRow={setRow}
+                          confirm={true} 
                         />
                       ) : (
                         <ReadOnlyRow
                           contact={contact}
+                          index={index}
                           handleEditClick={handleEditClick}
                           togglePopup={togglePopup}
                           setRow={setRow}
-                          setDeletingContactName={setDeletingContactName}
+                          setdeletingContactName={setDeletingContactName}
                         />
                       )}
                     </React.Fragment>
@@ -132,6 +141,10 @@ function Contacts() {
         />
       )}
     </div>
+        </div>
+    <Logout/>
+  </section>
+</div>
   );
 }
 

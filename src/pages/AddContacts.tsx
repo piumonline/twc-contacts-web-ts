@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AddContact from "../components/AddContact";
 import Logo from "../components/Logo";
 import Logout from "../components/Logout";
+import Cookies from "js-cookie";
 
 interface FormValues {
   name: string;
@@ -35,6 +36,9 @@ function AddContacts () {
 
     try {
 
+      const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
+      const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
+
       const response = await axios.post(
         'http://localhost:3000/contacts/',
         {
@@ -43,12 +47,12 @@ function AddContacts () {
           phone: formValues.phone,
           gender: formValues.gender,
           userId: formValues.userId,
-        },
+        },{ headers }
       ); 
 
       console.log(response.data);
       console.log("added");
-      navigate("/");
+      navigate("/contacts");
     } catch (error) {
       console.log(error);
     }

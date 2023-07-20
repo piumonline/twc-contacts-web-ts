@@ -38,7 +38,7 @@ function Register() {
         // submit form values to api
         const registerUser = async () => {
           try {
-            const response = await axios.post('http://localhost:3000/users/auth/register', {
+            await axios.post('http://localhost:3000/users/auth/register', {
               email: formValues.email,
               password: formValues.password,
             });
@@ -46,8 +46,7 @@ function Register() {
             console.log(formValues.password);
   
             console.log('user created');
-            console.log(response.data);
-            navigate("/login")
+            navigate('/login');
           } catch (error) {
             console.error(error);
           }

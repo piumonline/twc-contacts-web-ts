@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Logo from '../components/Logo';
+import Cookies from 'js-cookie';
+import { setAuthToken } from '../Routes/auth';
 
 interface FormValues {
   email: string;
@@ -35,8 +37,9 @@ function Login() {
         });
  
         console.log('Logged in successfully');
-        console.log(response.data);
+        setAuthToken(response.data);
         navigate('/');
+  
       } catch (error: any) {
         if (error.response && error.response.status === 401) {
           console.log('Invalid credentials');

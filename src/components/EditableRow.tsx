@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface Contact {
   id?: string;
@@ -36,15 +37,17 @@ const EditableRow: React.FC<EditableRowProps> = ({ contact, handleCancelClick, t
     togglePopup();
 
     try {
+      const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
+      const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
 
       const response = await axios.put(
-        `http://localhost:8080/api/contacts/${contact.id}`,
+        `http://localhost:3000/contacts/${contact.id}`,
         {
           name: contactData.name,
           email: contactData.email,
           phone: contactData.phone,
           gender: contactData.gender,
-        },
+        },{ headers },
       );
       console.log("updated");
       handleCancelClick();
