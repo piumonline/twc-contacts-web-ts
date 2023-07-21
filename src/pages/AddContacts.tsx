@@ -5,6 +5,7 @@ import AddContact from "../components/AddContact";
 import Logo from "../components/Logo";
 import Logout from "../components/Logout";
 import Cookies from "js-cookie";
+import { useMutation } from "react-query";
 
 interface FormValues {
   name: string;
@@ -29,12 +30,8 @@ function AddContacts() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formValues);
-
-    try {
-      const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
+  const postContact = async () => {
+    const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
       const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
 
       const response = await axios.post(
@@ -48,13 +45,14 @@ function AddContacts() {
         },
         { headers },
       );
+  }
 
-      console.log(response.data);
-      console.log("added");
-      navigate("/contacts");
-    } catch (error) {
-      console.log(error);
-    }
+  const mutation = useMutation(postContact);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    mutation.mutate();
+    navigate("/contacts");
+    console.log("added");
   };
 
   return (

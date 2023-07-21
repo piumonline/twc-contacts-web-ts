@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useMutation } from "react-query";
 
 interface Contact {
   id: string;
@@ -27,9 +28,9 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
   setRow,
   setdeletingContactName,
 }) => {
+
   // delete contact
-  const deleteContact = async (e: React.MouseEvent, contact: Contact) => {
-    try {
+  const deleteContact = async (contact: Contact) => {
       setdeletingContactName(contact.name);
       setRow("ReadOnlyRow");
       togglePopup();
@@ -41,9 +42,12 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
         headers,
       });
       console.log(`${contact.name} deleted}`);
-    } catch (error) {
-      console.log(error);
-    }
+  };
+
+  const mutation = useMutation(deleteContact)
+
+  const onClickDelete = async (e: React.MouseEvent, contact: Contact) => {
+    mutation.mutate(contact);
   };
 
   return (
@@ -71,7 +75,7 @@ const ReadOnlyRow: React.FC<ReadOnlyRowProps> = ({
         </button>
       </td>
       <td className="px-6 py-4">
-        <button type="button" onClick={(e) => deleteContact(e, contact)}>
+        <button type="button" onClick={(e) => onClickDelete(e, contact)}>
           <img
             src={"/img/material-symbols_delete-outline.svg"}
             width={20}

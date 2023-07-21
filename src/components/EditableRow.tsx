@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useMutation } from "react-query";
 
 interface Contact {
   id?: string;
@@ -37,14 +38,12 @@ const EditableRow: React.FC<EditableRowProps> = ({
   };
 
   // update contact
-  const handleSaveClick = async (
-    e: React.MouseEvent<HTMLButtonElement>,
+  const updateContact = async (
     contact: Contact,
   ) => {
     setRow("EditOnlyRow");
     togglePopup();
 
-    try {
       const token = Cookies.get("jwtToken"); // Retrieve the JWT token from cookies
       const headers = { Authorization: `Bearer ${token}` }; // Set the Authorization header
 
@@ -60,9 +59,12 @@ const EditableRow: React.FC<EditableRowProps> = ({
       );
       console.log("updated");
       handleCancelClick();
-    } catch (error) {
-      console.log(error);
-    }
+  };
+
+  const mutation = useMutation(updateContact);
+
+  const handleSaveClick = (e: React.MouseEvent<HTMLButtonElement>, contact: Contact) => {
+    mutation.mutate(contact);
   };
 
   return (
